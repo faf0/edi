@@ -1,9 +1,10 @@
 # EDI (Edgar's Delightful Interface)
 
 EDI (pronounced "Eddie") is a command-line chatbot interface that allows users to interact with various AI models through the Poe API.
-This interface supports maintaining conversation context across multiple messages.
+For your convenience, EDI prefers to go by "Edi" or "edi"!
+Edi supports maintaining conversation context across multiple messages.
 
-If EDI has a song, it will be this one: [Erste Allgemeine Verunsicherung (EAV) - Edi](https://www.youtube.com/watch?v=QN1Ek7pAoVc)
+If Edi has a song, it will be this one: [Erste Allgemeine Verunsicherung (EAV) - Edi](https://www.youtube.com/watch?v=QN1Ek7pAoVc)
 
 ## Features
 
@@ -19,7 +20,7 @@ Imagine this: you're in the terminal when a question pops up.
 Instead of switching to a browser, just tap into your favorite AI bot right from the terminal.
 Type your question, hit enter, and you get the answer!
 
-As your conversation can be saved locally, you can call EDI as your mentor anytime from anywhere for wise advice based on prior interactions.
+As your conversation can be saved locally, you can call Edi as your mentor anytime from anywhere for wise advice based on prior interactions.
 
 ## Requirements
 
@@ -29,15 +30,20 @@ As your conversation can be saved locally, you can call EDI as your mentor anyti
 
 1. Clone the repository or download the `edi.py` file.
 2. Ensure you have Python 3 installed on your machine.
-3. Create a Poe API key under [https://poe.com/api_key](https://poe.com/api_key).
+3. (Optional.) Link `edi.py` to `/usr/local/bin/edi` and make Edi executable, so you can just type `edi` on the terminal to run it:
+```shell
+chmod +x /path/to/edi.py
+sudo ln -s /path/to/edi/edi.py /usr/local/bin/edi
+```
 
 ## Configuration
 
-Before running the chatbot, you need to set up your API key:
+Before running Edi, you need to set up your Poe API key under [https://poe.com/api_key](https://poe.com/api_key).
 
-1. Run the script:
+1. Run Edi:
 ```shell
-python edi.py
+python3 edi.py
+edi # if linked to /usr/loca/bin/
 ```
 2. Enter your Poe API key when prompted (it should be 43 characters long).
 3. Select a model from the list provided.
@@ -48,9 +54,10 @@ The message history will be saved in `~/.config/edi/session.json`.
 
 ## Usage
 
-1. Start the chatbot by running the script:
+1. Run Edi:
 ```shell
-python edi.py
+python3 edi.py
+edi # if linked to /usr/loca/bin/
 ```
 2. Follow the prompts to enter your input.
 3. Use Ctrl-D or leave a blank line to signal the end of input.
@@ -69,10 +76,10 @@ python edi.py
 * Grok-4
 * ...and more models supported by [poe.com](https://poe.com/about)
 
-# How EDI Was Written
+# How Edi Was Written
 
-EDI can be written using EDI, but you have to start somewhere.
-For fun and the sake of good education, please read "Reflections on Trusting Trust" by Ken Thompson. 
+Edi can be written using Edi, although you have to start somewhere.
+For fun and the sake of good education, feel free read "Reflections on Trusting Trust" by Ken Thompson. 
 
 # Contributing
 
