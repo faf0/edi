@@ -24,6 +24,10 @@ MODELS = [
 POE_API_KEY_LENGTH = 43
 MessageType = Dict[str, Any]
 MessagesType = List[MessageType]
+INPUT_PROMPT = ">>> \n"
+OUTPUT_PROMPT = "\n<<< \n"
+
+loading: bool
 
 
 def load_config() -> Dict[str, str]:
@@ -146,9 +150,10 @@ def message_loop(api_key: str, model: str) -> None:
     output in each iteration.
     """
     messages = load_messages()
+    global loading
 
     while True:
-        user_input = get_user_input(">>> \n")
+        user_input = get_user_input(INPUT_PROMPT)
         if user_input.strip() == "":
             break  # Exit on blank input line
 
@@ -156,10 +161,8 @@ def message_loop(api_key: str, model: str) -> None:
             {"role": "user", "content": user_input}
         )  # Add user input to messages
 
-        global loading
-        loading = True
-
         # Start loading dots in a separate thread
+        loading = True
         loading_thread = threading.Thread(target=show_loading_dots)
         loading_thread.start()
 
@@ -170,7 +173,7 @@ def message_loop(api_key: str, model: str) -> None:
 
             choices = response_data.get("choices", [])
             if choices:
-                print("\n<<< ", end="")
+                print(OUTPUT_PROMPT, end="")
                 for choice in choices:
                     content = choice["message"].get("content", "")
                     print(content, end="", flush=True)
