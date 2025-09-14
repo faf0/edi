@@ -65,6 +65,7 @@ python edi.py
 * GPT-5-mini
 * Gemini-2.5-Pro
 * Grok-4
+* ...and more models supported by [poe.com](https://poe.com/about)
 
 # How EDI Was Written
 
