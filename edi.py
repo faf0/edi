@@ -210,13 +210,13 @@ def main() -> None:
     """Main function to run the EDI chatbot."""
     config = load_config()
 
-    if not config:
+    if config:
+        api_key = config["api_key"]
+        model = config["model"]
+    else:
         api_key = get_api_key()
         model = get_model()
         save_config(api_key, model)
-    else:
-        api_key = config["api_key"]
-        model = config["model"]
 
     print("\nWelcome to EDI! (Edgar's Delightful Interface)\n")
     print("Type 'Ctrl-D' or leave a blank line to end input and get the response.\n")
