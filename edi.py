@@ -80,11 +80,15 @@ def get_user_input(prompt: str) -> str:
 
 def get_api_key() -> str:
     """Get the API key from the user, masking the input."""
-    return getpass.getpass(
-        "Enter your Poe API key.\n"
-        "No characters will be displayed as you type.\n"
-        "Press Enter when done.\n"
-    )
+    while True:
+        api_key = getpass.getpass(
+            "Enter your Poe API key.\n"
+            "No characters will be displayed as you type.\n"
+            "Press Enter when done.\n"
+        )
+        if len(api_key) == POE_API_KEY_LENGTH:
+            return api_key
+        print("Invalid API key length. " f"Expected {POE_API_KEY_LENGTH} characters.")
 
 
 def show_loading_dots() -> None:
@@ -194,15 +198,7 @@ def main() -> None:
     config = load_config()
 
     if not config:
-        while True:
-            api_key = get_api_key()
-            if len(api_key) == POE_API_KEY_LENGTH:
-                break
-            print(
-                "Invalid API key length. "
-                f"Expected {POE_API_KEY_LENGTH} characters. "
-                "Please enter a valid key."
-            )
+        api_key = get_api_key()
 
         print("Available models:")
         for i, model in enumerate(MODELS):
