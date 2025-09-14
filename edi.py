@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
+import argparse
 import getpass
 import http.client
 import json
 import os
+import sys
 import threading
 import time
 from typing import Dict, Any, List
@@ -26,8 +28,6 @@ MessageType = Dict[str, Any]
 MessagesType = List[MessageType]
 INPUT_PROMPT = ">>> \n"
 OUTPUT_PROMPT = "\n<<< \n"
-
-loading: bool
 
 
 def load_config() -> Dict[str, str]:
@@ -104,14 +104,19 @@ def get_model() -> str:
     return MODELS[0]
 
 
-def show_loading_dots() -> None:
+def show_loading_dots(loading: List[bool], omit_print: bool) -> None:
     """Show loading dots while waiting for the model response."""
+    if omit_print:
+        # Printing that loading the message output is in progress is only
+        # relevant when the user is interacting with the CLI.
+        return
     print("\nLoading", end="", flush=True)
     while True:
         for _ in range(3):
             print(".", end="", flush=True)
             time.sleep(0.5)
-        if not loading:  # Check if we should stop loading
+        # loading is a List with a single bool to make the bool mutable
+        if not loading[0]:  # Check if we should stop loading
             break
     print()  # New line after loading complete
 
@@ -142,50 +147,62 @@ def chat(api_key: str, model: str, messages: MessagesType) -> MessagesType:
     return json.loads(response_data)
 
 
-def load_messages() -> MessagesType:
+def load_messages(continue_session: bool, omit_prompt: bool) -> MessagesType:
     """
     Return messages from a previous session if users wants to continue session
     or none otherwise.
     """
     messages = []  # List to hold the conversation context
 
-    continue_session = input("Continue last session? (y/n): ").strip().lower()
-    if continue_session not in ["y", "n", ""]:
-        continue_session = "n"  # Default to 'no' if input is invalid
-
-    if continue_session == "n":
-        messages.clear()  # Clear previous messages if starting new session
-    else:
+    if continue_session:
+        # CLI argument was passed to continue session
         messages = load_session()
+
+    if omit_prompt:
+        # This tool is not used interactively.
+        #
+        message = sys.stdin.read().strip()
+        messages.append({"role": "user", "content": message})
+        print(INPUT_PROMPT, end="", flush=True)
+        print(message, end="", flush=True)
+    elif not continue_session:
+        # This tool is used interactively and the flag to continue the last
+        # session was not present, so prompt the user:
+        continue_session_str = input("Continue last session? (y/n): ").strip().lower()
+        if continue_session_str == "y":
+            messages = load_session()
 
     return messages
 
 
-def message_loop(api_key: str, model: str) -> None:
+def message_loop(
+    api_key: str, model: str, continue_session: bool, omit_print: bool
+) -> None:
     """
     Implementation of the chat loop, reading user input and writing bot
     output in each iteration.
     """
-    messages = load_messages()
-    global loading
+    messages = load_messages(continue_session, omit_print)
 
     while True:
-        user_input = get_user_input(INPUT_PROMPT)
-        if user_input.strip() == "":
-            break  # Exit on blank input line
-
-        messages.append(
-            {"role": "user", "content": user_input}
-        )  # Add user input to messages
+        if not omit_print:
+            user_input = get_user_input(INPUT_PROMPT)
+            if user_input.strip() == "":
+                break  # Exit on blank input line
+            messages.append({"role": "user", "content": user_input})
 
         # Start loading dots in a separate thread
-        loading = True
-        loading_thread = threading.Thread(target=show_loading_dots)
+        # loading is a variable shared with the thread with a bool in a List to
+        # make the bool mutable
+        loading = [True]
+        loading_thread = threading.Thread(
+            target=show_loading_dots, args=(loading, omit_print)
+        )
         loading_thread.start()
 
         try:
             response_data = chat(api_key=api_key, model=model, messages=messages)
-            loading = False  # Stop loading dots
+            loading[0] = False  # Stop loading dots
             loading_thread.join()  # Wait for loading thread to finish
 
             choices = response_data.get("choices", [])
@@ -200,10 +217,14 @@ def message_loop(api_key: str, model: str) -> None:
                 save_session(messages)
             else:
                 print("\n<<< No response received.")
+            if omit_print:
+                break
         except Exception as e:
-            loading = False  # Stop loading dots
+            loading[0] = False  # Stop loading dots
             loading_thread.join()  # Ensure loading thread finishes
             print(f"\n<<< Error: {e}")
+            if omit_print:
+                break
 
 
 def main() -> None:
@@ -218,10 +239,32 @@ def main() -> None:
         model = get_model()
         save_config(api_key, model)
 
-    print("\nWelcome to EDI! (Edgar's Delightful Interface)\n")
-    print("Type 'Ctrl-D' or leave a blank line to end input and get the response.\n")
+    parser = argparse.ArgumentParser(
+        description="Control EDI behavior with command line arguments."
+    )
+    parser.add_argument(
+        "--continue",
+        dest="continue_session",
+        action="store_true",
+        help="Continue the previous session",
+    )
+    args = parser.parse_args()
 
-    message_loop(api_key=api_key, model=model)
+    # Check if input is being piped
+    omit_print = not sys.stdin.isatty()  # Omit printing if input is from a pipe
+
+    if not omit_print:
+        print("\nWelcome to EDI! (Edgar's Delightful Interface)\n")
+        print(
+            "Type 'Ctrl-D' or leave a blank line to end input and get the response.\n"
+        )
+
+    message_loop(
+        api_key=api_key,
+        model=model,
+        continue_session=args.continue_session,
+        omit_print=omit_print,
+    )
 
 
 if __name__ == "__main__":

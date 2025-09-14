@@ -54,14 +54,28 @@ The message history will be saved in `~/.config/edi/session.json`.
 
 ## Usage
 
+### Interactive
+
 1. Run Edi:
 ```shell
 python3 edi.py
 edi # if linked to /usr/loca/bin/
 ```
-2. Follow the prompts to enter your input.
-3. Use Ctrl-D or leave a blank line to signal the end of input.
-4. To exit the chat session, press Ctrl-D on a blank input line or end with a blank line.
+2. Run Edi with `--help` to see the list of supported command-line arguments.
+3. Follow the prompts to enter your input.
+4. Use Ctrl-D or leave a blank line to signal the end of input.
+5. To exit the chat session, press Ctrl-D on a blank input line or end with a blank line.
+
+### Non-Interactive
+
+You can pipe input into Edi and await the response from the bot for scripted use.
+The optional `--continue` command-line argument allows you to continue the last session.
+To start a fresh session, do not provide a command-line argument.
+
+Example:
+```shell
+echo 'Please summarize.\nWrite a paragraph and a list of about 5 bullet points.' | edi --continue
+```
 
 ## Models Available
 
