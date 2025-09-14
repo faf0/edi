@@ -88,7 +88,7 @@ def get_api_key() -> str:
         )
         if len(api_key) == POE_API_KEY_LENGTH:
             return api_key
-        print("Invalid API key length. " f"Expected {POE_API_KEY_LENGTH} characters.")
+        print(f"Invalid API key length. Expected {POE_API_KEY_LENGTH} characters.")
 
 
 def get_model() -> str:
