@@ -91,6 +91,19 @@ def get_api_key() -> str:
         print("Invalid API key length. " f"Expected {POE_API_KEY_LENGTH} characters.")
 
 
+def get_model() -> str:
+    """Get the Poe.com model/bot from the user."""
+    print("Available models:")
+    for i, model in enumerate(MODELS):
+        print(f"{i + 1}: {model}")
+
+    model_choice = int(input("Select a model by number: ")) - 1
+    if 0 <= model_choice < len(MODELS):
+        return MODELS[model_choice]
+    print(f"Invalid choice, defaulting to {MODELS[0]}.")
+    return MODELS[0]
+
+
 def show_loading_dots() -> None:
     """Show loading dots while waiting for the model response."""
     print("\nLoading", end="", flush=True)
@@ -199,18 +212,7 @@ def main() -> None:
 
     if not config:
         api_key = get_api_key()
-
-        print("Available models:")
-        for i, model in enumerate(MODELS):
-            print(f"{i + 1}: {model}")
-
-        model_choice = int(input("Select a model by number: ")) - 1
-        if 0 <= model_choice < len(MODELS):
-            model = MODELS[model_choice]
-        else:
-            print(f"Invalid choice, defaulting to {MODELS[0]}.")
-            model = MODELS[0]
-
+        model = get_model()
         save_config(api_key, model)
     else:
         api_key = config["api_key"]
