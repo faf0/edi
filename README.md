@@ -16,10 +16,10 @@ If EDI has a song, it will be this one: [Erste Allgemeine Verunsicherung (EAV) -
 ## Use Cases
 
 Imagine this: you're in the terminal when a question pops up.
-Instead of switching to a browser, just tap into your AI bot right from the terminal!
-Type your question, hit enter, and voila!
+Instead of switching to a browser, just tap into your favorite AI bot right from the terminal.
+Type your question, hit enter, and you get the answer!
 
-As your conversation can be saved locally, you can call EDI as your mentor anytime from anywhere for wise advice based on your prior interactions.
+As your conversation can be saved locally, you can call EDI as your mentor anytime from anywhere for wise advice based on prior interactions.
 
 ## Requirements
 
@@ -43,6 +43,8 @@ python edi.py
 3. Select a model from the list provided.
 
 The configuration will be saved in `~/.config/edi/config.json`.
+
+The message history will be saved in `~/.config/edi/session.json`.
 
 ## Usage
 
@@ -69,12 +71,12 @@ python edi.py
 
 # How EDI Was Written
 
-EDI can be written using EDI.
+EDI can be written using EDI, but you have to start somewhere.
 For fun and the sake of good education, please read "Reflections on Trusting Trust" by Ken Thompson. 
 
 # Contributing
 
-This project was written to get familiar with the Poe API.
+This project was written to build something useful for myself, while getting familiar with the Poe API.
 Feel free to submit pull requests for improvements or bug fixes.
 
 # License
