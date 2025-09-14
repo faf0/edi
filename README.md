@@ -74,7 +74,8 @@ To start a fresh session, do not provide a command-line argument.
 
 Example:
 ```shell
-echo 'Please summarize.\nWrite a paragraph and a list of about 5 bullet points.' | edi --continue
+echo 'Please summarize.\nWrite a paragraph and a list of about 5 bullet points.' | \
+  edi --continue
 ```
 
 ## Models Available
