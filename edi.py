@@ -26,8 +26,7 @@ MODELS = [
 POE_API_KEY_LENGTH = 43
 WELCOME_MESSAGE = "Welcome to Edgar's delightful interface (Edi)!"
 INSTRUCTION_MESSAGE = (
-    "Press Enter twice to end input.\n"
-    "Leave the input prompt blank and press Enter to exit."
+    "Press Enter twice to end input.\nPress Enter on a blank line to exit."
 )
 PROMPT_SEPARATOR = "-" * 60
 INPUT_PROMPT = "IN >>>\n"
