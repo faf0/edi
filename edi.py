@@ -217,10 +217,10 @@ def message_loop(
                 print(OUTPUT_PROMPT, flush=True, end="")
                 for choice in choices:
                     content = choice["message"].get("content", "")
+                    # Add assistant's response to messages for context
+                    messages.append({"role": "assistant", "content": content})
                     print(content, flush=True)
                 print(PROMPT_SEPARATOR, flush=True)
-                # Add assistant's response to messages for context
-                messages.append({"role": "assistant", "content": content})
                 save_session(messages)
             else:
                 print("\n<<< No response received.")
