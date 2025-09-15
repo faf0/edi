@@ -24,10 +24,17 @@ MODELS = [
     "Grok-4",
 ]
 POE_API_KEY_LENGTH = 43
+WELCOME_MESSAGE = "Welcome to Edgar's delightful interface (Edi)!"
+INSTRUCTION_MESSAGE = (
+    "Press Enter twice to end input.\n"
+    "Leave the input prompt blank and press Enter to exit."
+)
+PROMPT_SEPARATOR = "-" * 60
+INPUT_PROMPT = "IN >>>\n"
+OUTPUT_PROMPT = f"\nOUT <<<\n{PROMPT_SEPARATOR}\n"
+
 MessageType = Dict[str, Any]
 MessagesType = List[MessageType]
-INPUT_PROMPT = ">>> \n"
-OUTPUT_PROMPT = "\n<<< \n"
 
 
 def load_config() -> Dict[str, str]:
@@ -68,10 +75,7 @@ def get_user_input(prompt: str) -> str:
     print(prompt, end="", flush=True)
     lines = []
     while True:
-        try:
-            line = input()
-        except EOFError:  # Ctrl-D
-            break
+        line = input()
         if line.strip() == "":
             break
         lines.append(line)
@@ -184,6 +188,10 @@ def message_loop(
     """
     messages = load_messages(continue_session, omit_print)
 
+    if not omit_print:
+        print(INSTRUCTION_MESSAGE)
+        print()
+
     while True:
         if not omit_print:
             user_input = get_user_input(INPUT_PROMPT)
@@ -207,11 +215,11 @@ def message_loop(
 
             choices = response_data.get("choices", [])
             if choices:
-                print(OUTPUT_PROMPT, end="")
+                print(OUTPUT_PROMPT, flush=True, end="")
                 for choice in choices:
                     content = choice["message"].get("content", "")
-                    print(content, end="", flush=True)
-                print()  # New line after the response
+                    print(content, flush=True)
+                print(PROMPT_SEPARATOR, flush=True)
                 # Add assistant's response to messages for context
                 messages.append({"role": "assistant", "content": content})
                 save_session(messages)
@@ -254,10 +262,7 @@ def main() -> None:
     omit_print = not sys.stdin.isatty()  # Omit printing if input is from a pipe
 
     if not omit_print:
-        print("\nWelcome to EDI! (Edgar's Delightful Interface)\n")
-        print(
-            "Type 'Ctrl-D' or leave a blank line to end input and get the response.\n"
-        )
+        print(WELCOME_MESSAGE)
 
     message_loop(
         api_key=api_key,
