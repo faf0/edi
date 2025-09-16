@@ -1,7 +1,6 @@
-# EDI (Edgar's Delightful Interface)
+# Edi (Edgar's delightful interface)
 
-EDI (pronounced "Eddie") is a command-line chatbot interface that allows users to interact with various AI models through the Poe API.
-For your convenience, EDI prefers to go by "Edi" or "edi"!
+Edi (pronounced "Eddie") is a command-line chatbot interface that allows users to interact with various AI models through the Poe API.
 Edi supports maintaining conversation context across multiple messages.
 
 If Edi has a song, it will be this one: [Erste Allgemeine Verunsicherung (EAV) - Edi](https://www.youtube.com/watch?v=QN1Ek7pAoVc)
@@ -63,8 +62,8 @@ edi # if linked to /usr/loca/bin/
 ```
 2. Run Edi with `--help` to see the list of supported command-line arguments.
 3. Follow the prompts to enter your input.
-4. Use Ctrl-D or leave a blank line to signal the end of input.
-5. To exit the chat session, press Ctrl-D on a blank input line or end with a blank line.
+4. Press Enter twice to end input.
+5. Press Enter on a blank line to exit.
 
 ### Non-Interactive
 
@@ -94,6 +93,7 @@ echo 'Please summarize.\nWrite a paragraph and a list of about 5 bullet points.'
 # How Edi Was Written
 
 Edi can be written using Edi, although you have to start somewhere.
+
 For fun and the sake of good education, feel free read "Reflections on Trusting Trust" by Ken Thompson. 
 
 # Contributing
