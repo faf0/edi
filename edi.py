@@ -52,13 +52,13 @@ def save_config(api_key: str, model: str) -> None:
     }
     os.makedirs(os.path.dirname(CONFIG_PATH), exist_ok=True)
     with open(CONFIG_PATH, "w", encoding="utf-8") as f:
-        json.dump(config, f)
+        json.dump(config, f, indent=2)
 
 
 def save_session(messages: MessagesType) -> None:
     """Save the session messages to a file."""
     with open(SESSION_FILE, "w", encoding="utf-8") as f:
-        json.dump(messages, f)
+        json.dump(messages, f, indent=2)
 
 
 def load_session() -> MessagesType:
