@@ -73,11 +73,16 @@ def get_user_input(prompt: str) -> str:
     """Get user input from the command line."""
     print(prompt, end="", flush=True)
     lines = []
+
     while True:
-        line = input()
-        if line.strip() == "":
+        try:
+            line = input()
+            if not line.strip():
+                break
+            lines.append(line)
+        except EOFError:
             break
-        lines.append(line)
+
     return "\n".join(lines)
 
 
